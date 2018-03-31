@@ -13,25 +13,35 @@ const mongoose   = require("mongoose"),
         staff: {
             type: Boolean,
             default: false
+        },
+        profileImage: {
+          type: String,
+          default: "https://maxcdn.icons8.com/Share/icon/Users//user_male_circle_filled1600.png"
         }
       });
       
-userSchema.pre('save', function(next){
-  var user = this;
-  if (!user.isModified('password')) return next();
-  bcrypt.hash(user.password, 10).then(function(hashedPassword) {
-      user.password = hashedPassword;
-      next();
-  }, function(err){
-    return next(err);
-  });
+userSchema.pre("save", async function(next){
+   try{
+      if(!this.isModified("password")){
+        return next();
+     }
+     let hashedPassword = await bcrypt.hash(this.password, 10);
+     this.password = hashedPassword;
+     return next();
+   }
+   catch(error) {
+     return next(error);
+   }
 });
 
-userSchema.methods.comparePassword = function(candidatePassword, next) {
-  bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
-    if(err) return next(err);
-    next(null, isMatch);
-  });
+userSchema.methods.comparePassword = async function(candidatePassword, next){
+   try {
+     let isMatch = await bcrypt.compare(candidatePassword, this.password);
+     return isMatch;
+   }
+  catch(error){
+     return next(error);
+   }
 };
 
 module.exports = mongoose.model("User", userSchema);

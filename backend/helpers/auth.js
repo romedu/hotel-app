@@ -1,34 +1,47 @@
 var db = require('../models');
 var jwt = require('jsonwebtoken');
 
-exports.login = function(req,res){
-  db.User.findOne({username: req.body.username}).then(function(user){
-    user.comparePassword(req.body.password, function(err, isMatch){
-      if(isMatch){
-        var token = jwt.sign({userId: user.id}, process.env.SECRET_KEY);
-        res.status(200).json({userId: user.id,
-                              username: user.username,
-                              token
-                            });
-      } else {
-        res.status(400).json({message: 'Invalid Email/Password.'});
-      }
-    });
-  }).catch(function(err){
-    res.status(400).json({message: 'Invalid Email/Password'});
-  });
+exports.login = async function(req, res, next){
+  try {
+    let user = await db.User.findOne({username: req.body.username});
+    let {id, username, profileImage} = user;
+    let isMatch = await user.comparePassword(req.body.password);
+    
+    if(isMatch){
+      let token = jwt.sign({id, username, profileImage}, process.env.SECRET_KEY);
+      return res.status(200).json({id, username, profileImage, token});
+    } else {
+        return next({
+          status: 400,
+          message: "Invalid Username/Password"
+        });
+    }
+  }
+  catch (e){
+    console.log(e);
+    return next({
+             status: 400,
+             message: "Invalid Username/Password"
+           });
+  }
 };
 
-exports.register = function(req, res, next){
-  db.User.create(req.body).then(function(user){
-    var token = jwt.sign({ userId: user.id}, process.env.SECRET_KEY);
-    res.status(200).json({userId: user.id,
-                          username: user.username,
-                          token
-                        });
-  }).catch(function(err) {
-    res.status(400).json(err);
-  });
+exports.register = async function(req, res, next){
+   try {
+      let user = await db.User.create(req.body);
+      let {id, username, profileImage} = user;
+      let token = jwt.sign({id, username, profileImage}, process.env.SECRET_KEY);
+      return res.status(200).json({id, username, profileImage, token});
+   }
+   catch (error){
+      if(error.code === 11000){
+         error.message = "Sorry, that username is unavailable";
+      }
+      return next({
+         status: 400,
+         message: error.message
+      });
+   }
 };
 
 module.exports = exports;
