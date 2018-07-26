@@ -16,7 +16,7 @@ const mongoose   = require("mongoose"),
         },
         profileImage: {
           type: String,
-          default: "https://maxcdn.icons8.com/Share/icon/Users//user_male_circle_filled1600.png"
+          default: "http://www.a2zapps.com/corporate/image/common-icon-default-user.png"
         }
       });
       

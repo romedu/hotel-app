@@ -1,0 +1,15 @@
+.Profile {
+    width: 100vw;
+    height: 89vh;
+    padding-top: 11vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(#ffffff, #ffeac2);
+}
+
+@media (max-height: 639px) {
+    .Profile{
+        height: 98vh;
+    }
+}

@@ -1,15 +1,100 @@
 .NavItems {
+   margin-top: 100px;
    margin: 0;
-   padding: 0;
+   padding: 0 4vw;
    list-style: none;
    display: flex;
    flex-direction: column;
    align-items: center;
-   height: 100%;
+   justify-content: space-between;
+   height: 70vh;
+   transition-duration: 0.5s;
+}
+
+.NavItems > a {
+   font-weight: bold;
+}
+
+.userful {
+   padding-top: 22vh;
+}
+
+.userless {
+   background-color: #fed154;
+   color: white; 
+   width: 32vw;
+   text-align: center;
+   margin: 4vh 0; 
+   box-shadow: 3px 3px 8px #888888;
+   text-decoration: none;
+}
+
+.userless h3 {
+   margin: 0.5vh 0;
+}
+
+.active {
+   transform: scale(1.1);
+   padding-left: 3vw;
+   color: #FFAF37;
 }
 
 @media (min-width: 500px) {
    .NavItems {
       flex-direction: row;
    }
+}
+
+.Hide {
+   visibility: hidden;
+}
+
+.NavItem {
+   margin: 10px 0;
+   box-sizing: border-box;
+   display: block;
+   width: 100%;
+   color: #8F5C2C;
+   text-decoration: none;
+}
+
+.NavItem a:hover,
+.NavItem a:active,
+.NavItem a.active {
+   color: #40A4C8;
+}
+
+@media (min-width: 500px) {
+   .NavItem {
+      margin: 0;
+      display: flex;
+      height: 100%;
+      width: auto;
+      align-items: center;
+   }
+
+   .NavItem a {
+      color: white;
+      height: 100%;
+      padding: 16px 10px;
+      border-bottom: 4px solid transparent;
+   }
+
+   .NavItem a:hover,
+   .NavItem a:active,
+   .NavItem a.active {
+      background-color: #8F5C2C;
+      border-bottom: 4px solid #40A4C8;
+      color: white;
+   }
+}
+
+.subItems {
+   list-style: none;
+}
+
+.subItems img {
+   width: 7vw;
+   height: 4vh;
+   margin-right: 3vw;
 }

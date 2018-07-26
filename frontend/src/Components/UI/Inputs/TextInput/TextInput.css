@@ -1,0 +1,7 @@
+.TextInput {
+    margin: 0.5vh;
+    padding: 0.5vh 6vw;
+    border: 0.1vh solid lightgray;
+    border-radius: 8px;
+    font-size: 1.2em;
+}

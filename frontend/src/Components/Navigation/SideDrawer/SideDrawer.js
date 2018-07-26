@@ -1,16 +1,14 @@
 import React, {Fragment} from "react";
-import Logo from "../../UI/Logo/Logo";
 import NavItems from "../NavItems/NavItems";
-import Class from "./SideDrawer.css";
+import "./SideDrawer.css";
 import Backdrop from "../../UI/Backdrop/Backdrop";
 
 const SideDrawer = props => (
    <Fragment>
-      <Backdrop show={props.show} hide={props.hide}/>
-      <div className={[Class.SideDrawer, Class[props.show ? "Open" : "Close"]].join(" ")}>
-         <Logo styles={{height: "11%", marginBottom: "32px"}}/>
+      <Backdrop show={props.showing} hide={props.hide}/>
+      <div className={`SideDrawer ${props.showing ? "Open" : "Close"}`}>
          <nav>
-            <NavItems />
+            <NavItems hide={props.hide} showing={props.showing} currentUser={props.currentUser}/>
          </nav>
       </div>   
    </Fragment>

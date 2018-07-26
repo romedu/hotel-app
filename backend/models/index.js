@@ -1,10 +1,12 @@
-const mongoose = require("mongoose"),
-      User     = require("./user");
+const mongoose = require("mongoose");
         
 mongoose.set("debug", true);
 mongoose.connect("mongodb://localhost/hotel-app");
 mongoose.Promise = Promise;
 
-exports.User = User;
+exports.User       = require("./user");
+exports.Product    = require("./product");
+exports.Restaurant = require("./restaurant");
+exports.Dish       = require("./dish");
 
 module.exports = exports;

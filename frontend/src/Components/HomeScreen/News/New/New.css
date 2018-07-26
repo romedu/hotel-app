@@ -1,0 +1,13 @@
+.New {
+      width: 45vw;
+      height: 20vh;
+      background-color: #f2f4f7;
+      margin-top: 1vh;
+      text-align: center;
+    }
+
+@media (max-height: 639px) {
+    .New {
+        padding-bottom: 2vh;
+    }
+}

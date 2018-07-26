@@ -1,0 +1,14 @@
+.Ad {
+    width: 92vw;
+    height: 22vh;
+    background-color: #f2f4f7;
+}
+
+.Ad img {
+    width: 20vw;
+    height: 12vh;
+}
+
+.Ad h3 {
+    margin: 1vh 1vw;
+}

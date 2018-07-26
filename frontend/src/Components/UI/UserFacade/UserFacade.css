@@ -1,0 +1,27 @@
+.Facade {
+    color: white;
+    background-color: #fed154;
+    height: 16vh;
+    width: 91%;
+    padding: 5%;
+    box-shadow: 3px 3px 8px #888888;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.Facade img {
+    width: 25vw;
+    height: 14vh;
+}
+
+.Image {
+    background-color: #FFAF37;
+    border-radius: 50%;
+    float: left;
+}
+
+h3 {
+    display: inline-block;
+    margin: 10%;
+}

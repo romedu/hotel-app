@@ -1,8 +1,8 @@
 import React from "react";
-import Class from "./Hamburger";
+import "./Hamburger.css";
 
 const Hamburger = props => (
-   <div className={Class.Hamburger}>
+   <div className={"Hamburger"} onClick={props.toggleMenu}>
       <div></div>
       <div></div>
       <div></div>

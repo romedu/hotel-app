@@ -1,0 +1,18 @@
+.Authentication {
+    width: 100vw;
+    height: 87vh;
+    padding-top: 13vh;
+    background: linear-gradient(#ffffff, #ffeac2);
+    text-align: center;
+}
+
+.Link {
+    color: black;
+    margin: 0 5vw;
+    transition-duration: 0.8s;
+}
+
+.activeLink {
+    transform: scale(1.2em);
+    font-weight: bold;
+}

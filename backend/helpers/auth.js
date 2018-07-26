@@ -44,4 +44,11 @@ exports.register = async function(req, res, next){
    }
 };
 
+exports.verifyToken = (req, res, next) => {
+    return jwt.verify(req.params.token, process.env.SECRET_KEY, (error, decoded) => {
+               if(error) return next(error);
+               return res.status(200).json(decoded); 
+           });
+};
+
 module.exports = exports;
