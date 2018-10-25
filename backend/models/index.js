@@ -8,5 +8,6 @@ exports.User       = require("./user");
 exports.Product    = require("./product");
 exports.Restaurant = require("./restaurant");
 exports.Dish       = require("./dish");
+exports.Category   = require("./category");
 
 module.exports = exports;

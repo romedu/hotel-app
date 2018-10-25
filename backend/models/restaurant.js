@@ -4,17 +4,25 @@ const mongoose         = require("mongoose"),
               type: String,
               required: true
           },
-          description: {
-              type: String,
-              default: ""
-          },
           image: {
+              type: String,
+              required: true
+          },
+          description: {
               type: String,
               required: true
           },
           menu: [{
               type: mongoose.Schema.Types.ObjectId,
               ref: "Dish"
+          }],
+          reservationLimit: {
+              type: Number,
+              min: 1
+          },
+          reservations: [{
+              type: mongoose.Schema.Types.ObjectId,
+              ref: "User"
           }]
       });
       

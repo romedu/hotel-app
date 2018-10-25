@@ -1,9 +1,14 @@
-function errorHandler(error, request, response, next){
-   return response.status(error.status || 500).json({
-      error: {
-         message: error.message || "Oops! Something went wrong."
-      }
-   });
-}
+exports.createError = (status, message) => {
+   const error = new Error(message);
+   error.status = status;
+   return error;
+};
 
-module.exports = errorHandler;
+exports.errorHandler = (error, request, response, next) => {
+   const {status, message} = error;
+   return response.status(status || 500).json({
+         message: message || "Oops! Something went wrong."
+   });
+};
+
+module.exports = exports;

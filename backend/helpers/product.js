@@ -1,44 +1,50 @@
-const {Product} = require("../models");
+const {Product} = require("../models"),
+      {createError} = require("./error");
 
-exports.findEverySingleOne = (req, res) => {
+exports.find = (req, res, next) => {
     Product.find({})
-        .then(allProducts =>  res.json({Products: allProducts}))
-        .catch(error => res.json(error));
+        .then(products => {
+            if(!products) throw createError(404, "Not Found");
+            return res.status(200).json(products);
+        })
+        .catch(error => next(error));
 };
 
-exports.findAll = (req, res) => {
-    Product.find({kingdom: req.params.type})
-        .then(products => res.json(products))
-        .catch(error => res.json(error));
-};
-
-exports.create = (req, res) => {
+exports.create = (req, res, next) => {
     Product.create(req.body)
         .then(newProduct => {
-            newProduct.kingdom = req.params.type;
-            newProduct.save();
-            return res.json(newProduct);
+            const {category} = req;
+            category.products.push(newProduct._id);
+            return Promise.all([newProduct, category.save()]);
         })
-        .catch(error => res.json(error));
+        .then(response => res.status(201).json(response[0]))
+        .catch(error => next(error));
 };
 
-exports.findOne = (req, res) => {
-    Product.findById(req.params.id)
-        .then(foundProduct => res.json(foundProduct))
-        .catch(error => res.json(error));
+exports.findOne = (req, res, next) => {
+    Product.findById(req.params.productId).populate("category").exec()
+        .then(foundProduct => {
+            if(!foundProduct) throw createError(404, "Not Found");
+            res.status(200).json(foundProduct);
+        })
+        .catch(error => next(error));
 };
 
-exports.update = (req, res) => {
-    Product.findByIdAndUpdate(req.params.id, req.body, {new: true})
+exports.update = (req, res, next) => {
+    Product.findByIdAndUpdate(req.params.productId, req.body, {new: true})
         .then(editedProduct => res.json(editedProduct))
-        .catch(error => res.json(error));
+        .catch(error => next(error));
 };
 
-exports.delete = (req, res) => {
-    Product.findByIdAndRemove(req.params.id)
-        .then(deletedProduct => Product.find({kingdom: deletedProduct.kingdom}))
-        .then(products => res.json(products))
-        .catch(error => res.json(error));
+exports.delete = (req, res, next) => {
+    Product.findByIdAndRemove(req.params.productId)
+        .then(exProduct => {
+            const {category} = req;
+            category.products.pull(req.params.id);
+            return category.save();
+        })
+        .then(response => res.json({message: "Product removed successfully"}))
+        .catch(error => next(error));
 };
 
 module.exports = exports;

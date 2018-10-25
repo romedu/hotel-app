@@ -17,6 +17,18 @@ const mongoose   = require("mongoose"),
         profileImage: {
           type: String,
           default: "http://www.a2zapps.com/corporate/image/common-icon-default-user.png"
+        },
+        daysAsGuest: {
+            type: Number,
+            default: 0
+        },
+        exclusiveMember: {
+            type: Boolean,
+            default: false
+        },
+        reservation: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Restaurant"
         }
       });
       
@@ -25,7 +37,7 @@ userSchema.pre("save", async function(next){
       if(!this.isModified("password")){
         return next();
      }
-     let hashedPassword = await bcrypt.hash(this.password, 10);
+     const hashedPassword = await bcrypt.hash(this.password, 10);
      this.password = hashedPassword;
      return next();
    }
@@ -36,7 +48,7 @@ userSchema.pre("save", async function(next){
 
 userSchema.methods.comparePassword = async function(candidatePassword, next){
    try {
-     let isMatch = await bcrypt.compare(candidatePassword, this.password);
+     const isMatch = await bcrypt.compare(candidatePassword, this.password);
      return isMatch;
    }
   catch(error){

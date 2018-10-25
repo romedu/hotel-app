@@ -3,12 +3,12 @@ var jwt = require('jsonwebtoken');
 
 exports.login = async function(req, res, next){
   try {
-    let user = await db.User.findOne({username: req.body.username});
-    let {id, username, profileImage} = user;
-    let isMatch = await user.comparePassword(req.body.password);
+    const user = await db.User.findOne({username: req.body.username});
+    const {id, username, profileImage} = user;
+    const isMatch = await user.comparePassword(req.body.password);
     
     if(isMatch){
-      let token = jwt.sign({id, username, profileImage}, process.env.SECRET_KEY);
+      const token = jwt.sign({id, username, profileImage}, process.env.SECRET_KEY);
       return res.status(200).json({id, username, profileImage, token});
     } else {
         return next({
@@ -18,7 +18,6 @@ exports.login = async function(req, res, next){
     }
   }
   catch (e){
-    console.log(e);
     return next({
              status: 400,
              message: "Invalid Username/Password"
@@ -45,8 +44,20 @@ exports.register = async function(req, res, next){
 };
 
 exports.verifyToken = (req, res, next) => {
-    return jwt.verify(req.params.token, process.env.SECRET_KEY, (error, decoded) => {
-               if(error) return next(error);
+    const token = req.get("Authorization"),
+          {SECRET_KEY} = process.env;
+    
+    if(!token){
+        const error = new Error("Invalid/Expired Token");
+        return next(error);
+    }
+    
+    return jwt.verify(token, SECRET_KEY, (error, decoded) => {
+               if(error){
+                  error.message = "Invalid/Expired Token";
+                  return next(error);
+               }
+               
                return res.status(200).json(decoded); 
            });
 };

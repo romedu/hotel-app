@@ -4,12 +4,25 @@ const mongoose      = require("mongoose"),
             type: String,
             required: true
         },
-        kingdom: {
-            type: String
+        category: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Category"
         },
         image: {
             type: String,
             required: true
+        },
+        description: {
+            type: String,
+            required: true
+        },
+        price: {
+            type: Number,
+            default: 0
+        },
+        exclusiveOnly: {
+            type: Boolean,
+            default: false
         }
       });
       

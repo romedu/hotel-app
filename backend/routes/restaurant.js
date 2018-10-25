@@ -1,14 +1,15 @@
-const express = require("express"),
-      router  = express.Router(),
-      helpers = require("../helpers/restaurant.js");
+const express    = require("express"),
+      router     = express.Router(),
+      helpers    = require("../helpers/restaurant.js"),
+      middleware = require("../middleware");
       
 router.route("/")
-    .get(helpers.findAll)
-    .post(helpers.create);
+    .get(helpers.find)
+    .post(middleware.checkIfToken, middleware.checkIfStaff, helpers.create);
     
 router.route("/:id")
     .get(helpers.findOne)
-    .patch(helpers.update)
-    .delete(helpers.delete);
+    .patch(middleware.checkIfToken, middleware.checkIfStaff, helpers.update)
+    .delete(middleware.checkIfToken, middleware.checkIfStaff, helpers.delete);
     
 module.exports = router;

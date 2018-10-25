@@ -1,53 +1,44 @@
-const {Restaurant, Dish} = require("../models");
+const {Dish} = require("../models");
 
-exports.findAll = (req, res) => {
+exports.find = (req, res, next) => {
     Dish.find({servedIn: req.params.id})
-        .then(dishes => res.json(dishes))
-        .catch(error => res.json(error));
+        .then(dishes => res.status(200).json(dishes))
+        .catch(error => next(error));
 };
 
-exports.create = (req, res) => {
+exports.create = (req, res, next) => {
     Dish.create(req.body)
         .then(newDish => {
-            Restaurant.findById(req.params.id)
-                .then(restaurant => {
-                    restaurant.menu.push(newDish);
-                    let savedRestaurant = restaurant.save();
-                    newDish.servedIn = restaurant.id;
-                    let savedDish = newDish.save();
-                    return Promise.all([savedRestaurant, savedDish]);
-                })
-                .then(data => res.json(newDish))
-                .catch(error => res.json(error));
+            const {restaurant} = req;
+            restaurant.menu.push(newDish);
+            newDish.servedIn = restaurant._id;
+            return Promise.all([newDish, restaurant.save(), newDish.save()]);
         })
-        .catch(error => res.json(error));
+        .then(resolve => res.status(201).json(resolve[0]))
+        .catch(error => next(error));
 };
 
-exports.findOne = (req, res) => {
+exports.findOne = (req, res, next) => {
     Dish.findById(req.params.dishId)
-        .then(dish => res.json(dish))
-        .catch(error => res.json(error));
+        .then(dish => res.status(200).json(dish))
+        .catch(error => next(error));
 };
 
-exports.update = (req, res) => {
+exports.update = (req, res, next) => {
     Dish.findByIdAndUpdate(req.params.dishId, req.body, {new: true})
-        .then(dish => res.json(dish))
-        .catch(error => res.json(error));
+        .then(editDish => res.status(204).json(editDish))
+        .catch(error => next(error));
 };
 
-exports.delete = (req, res) => {
-    Restaurant.findById(req.params.id)
-        .then(restaurant => {
-            Dish.findByIdAndRemove(req.params.dishId)
-                .then(exDish => {
-                    restaurant.menu.pull(exDish.id);
-                    restaurant.save();
-                    return Dish.find({servedIn: req.params.id});
-                })
-                .then(dishes => res.json(dishes))
-                .catch(error => res.json(error));
+exports.delete = (req, res, next) => {
+    Dish.findByIdAndRemove(req.params.dishId)
+        .then(exDish => {
+            const {restaurant} = req;
+            restaurant.menu.pull(exDish.id);
+            return restaurant.save();
         })
-        .catch(error => res.json(error));
+        .then(resolve => res.status(204).json({message: "Dish removed successfully"}))
+        .catch(error => next(error));
 };
 
 module.exports = exports;

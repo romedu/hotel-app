@@ -1,16 +1,16 @@
-const express   = require("express"),
-      router    = express.Router(),
-      helpers   = require("../helpers/product");
+const express    = require("express"),
+      router     = express.Router(),
+      helpers    = require("../helpers/product"),
+      middleware = require("../middleware"),
+      {checkIfCategory} = require("../middleware/category");
       
-router.get("/", helpers.findEverySingleOne);
-      
-router.route("/:type")
-    .get(helpers.findAll)
-    .post(helpers.create);
+router.route("/")
+    .get(helpers.find)
+    .post(middleware.checkIfToken, middleware.checkIfStaff, checkIfCategory, helpers.create);
     
-router.route("/:type/:id")
+router.route("/:productId")
     .get(helpers.findOne)
-    .patch(helpers.update)
-    .delete(helpers.delete);
+    .patch(middleware.checkIfToken, middleware.checkIfStaff, helpers.update)
+    .delete(middleware.checkIfToken, middleware.checkIfStaff, checkIfCategory, helpers.delete);
     
-module.exports= router;
+module.exports = router;
