@@ -12,6 +12,7 @@ const mongoose      = require("mongoose"),
             type: String,
             required: true
         },
+        icon: String,
         description: {
             type: String,
             required: true
