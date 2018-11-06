@@ -1,4 +1,4 @@
-const {Category} = require("../model"),
+const {Category} = require("../models"),
       {createError} = require("../helpers/error");
 
 exports.checkIfCategory = (req, res, next) => {

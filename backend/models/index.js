@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
         
 mongoose.set("debug", true);
-mongoose.connect("mongodb://localhost/hotel-app");
+mongoose.connect("mongodb://localhost/hotel-app", {useNewUrlParser: true});
 mongoose.Promise = Promise;
 
 exports.User       = require("./user");

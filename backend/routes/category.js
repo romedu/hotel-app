@@ -1,4 +1,4 @@
-const router = require("express").router(),
+const router = require("express").Router(),
       helpers = require("../helpers/category"),
       middleware = require("../middleware");
       
