@@ -10,7 +10,7 @@ const mongoose   = require("mongoose"),
             type: String,
             required: true
         },
-        staff: {
+        isAdmin: {
             type: Boolean,
             default: false
         },
@@ -36,13 +36,13 @@ userSchema.pre("save", async function(next){
    try{
       if(!this.isModified("password")){
         return next();
-     }
-     const hashedPassword = await bcrypt.hash(this.password, 10);
-     this.password = hashedPassword;
-     return next();
+      }
+      const hashedPassword = await bcrypt.hash(this.password, 10);
+      this.password = hashedPassword;
+      return next();
    }
    catch(error) {
-     return next(error);
+      return next(error);
    }
 });
 

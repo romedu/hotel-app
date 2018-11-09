@@ -1,65 +1,63 @@
-var db = require('../models');
-var jwt = require('jsonwebtoken');
+const DB = require('../models'),
+      jwt = require('jsonwebtoken'),
+      {createError} = require("./error");
 
 exports.login = async function(req, res, next){
-  try {
-    const user = await db.User.findOne({username: req.body.username});
-    const {id, username, profileImage} = user;
-    const isMatch = await user.comparePassword(req.body.password);
+   try {
+      const {username, password} = req.body; 
+      const user = await DB.User.findOne({username});
+      const {id, profileImage, isAdmin} = user;
+      const isMatch = await user.comparePassword(password);
     
-    if(isMatch){
-      const token = jwt.sign({id, username, profileImage}, process.env.SECRET_KEY);
-      return res.status(200).json({id, username, profileImage, token});
-    } else {
-        return next({
-          status: 400,
-          message: "Invalid Username/Password"
-        });
-    }
+      if(isMatch){
+         const token = jwt.sign({id, username, profileImage, isAdmin}, process.env.SECRET_KEY);
+         return res.status(200).json({id, username, profileImage, isAdmin, token});
+      } 
+      else {
+         const error = createError(400, "Invalid Username/Password");
+         return next(error);
+      }
   }
-  catch (e){
-    return next({
-             status: 400,
-             message: "Invalid Username/Password"
-           });
+  catch (error){
+      error = createError(400, "Invalid Username/Password");
+      return next(error);
   }
 };
 
 exports.register = async function(req, res, next){
    try {
-      let user = await db.User.create(req.body);
-      let {id, username, profileImage} = user;
-      let token = jwt.sign({id, username, profileImage}, process.env.SECRET_KEY);
-      return res.status(200).json({id, username, profileImage, token});
+      const user = await DB.User.create(req.body);
+      const {id, username, profileImage, isAdmin} = user;
+      const token = jwt.sign({id, username, profileImage, isAdmin}, process.env.SECRET_KEY);
+      return res.status(200).json({id, username, profileImage, isAdmin, token});
    }
    catch (error){
       if(error.code === 11000){
          error.message = "Sorry, that username is unavailable";
       }
-      return next({
-         status: 400,
-         message: error.message
-      });
+      
+      error = createError(409, error.message);
+      return next(error);
    }
 };
 
 exports.verifyToken = (req, res, next) => {
-    const token = req.get("Authorization"),
-          {SECRET_KEY} = process.env;
-    
-    if(!token){
-        const error = new Error("Invalid/Expired Token");
-        return next(error);
-    }
-    
-    return jwt.verify(token, SECRET_KEY, (error, decoded) => {
-               if(error){
-                  error.message = "Invalid/Expired Token";
-                  return next(error);
-               }
-               
-               return res.status(200).json(decoded); 
-           });
+   const token = req.get("Authorization"),
+         {SECRET_KEY} = process.env;
+   
+   if(!token){
+      const error = createError(400, "Invalid/Expired Token");
+      return next(error);
+   }
+   
+   return jwt.verify(token, SECRET_KEY, (error, decoded) => {
+             if(error){
+                error = createError(400, "Invalid/Expired Token");
+                return next(error);
+             }
+             
+             return res.status(200).json(decoded); 
+          });
 };
 
 module.exports = exports;

@@ -1,6 +1,20 @@
 var jwt = require('jsonwebtoken'),
     {createError} = require("../helpers/error");
 
+exports.checkAdminPassword = (req, res, next) => {
+    const {ADMIN_KEY} = process.env,
+          {body} = req;
+    
+    if(body.isAdmin){
+        if(body.adminPassword === ADMIN_KEY) return next();
+        else {
+            const error = createError(401, "Incorrect Staff password");
+            return next(error);
+        }
+    }
+    return next();
+};
+
 exports.checkIfToken = (req, res, next) => {
     const token = req.get("Authorization"),
           {SECRET_KEY} = process.env;
@@ -29,7 +43,6 @@ exports.sanitizeBody = (req, res, next) => {
     for(const field in req.body){
         req.body[field] = req.sanitize(req.body[field]);
     }
-    
     next();
 };
 
