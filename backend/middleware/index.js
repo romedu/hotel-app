@@ -20,7 +20,7 @@ exports.checkIfToken = (req, res, next) => {
           {SECRET_KEY} = process.env;
     
     if(!token){
-        const error = new Error("A valid token is required");
+        const error = createError(400, "A valid token is required");
         return next(error);
     }
     

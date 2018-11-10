@@ -4,11 +4,10 @@ exports.createError = (status, message) => {
    return error;
 };
 
-exports.errorHandler = (error, request, response, next) => {
+exports.errorHandler = (error, req, res, next) => {
    const {status, message} = error;
-   return response.status(status || 500).json({
-         message: message || "Oops! Something went wrong."
-   });
+   if(!status) error.status = 500;
+   return res.status(status).json({status, message});
 };
 
 module.exports = exports;
