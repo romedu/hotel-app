@@ -2,7 +2,9 @@ const {Product} = require("../models"),
       {createError} = require("./error");
 
 exports.find = (req, res, next) => {
-    Product.find({})
+    const searchQuery = req.query.all ? {} : {category: req.params.id};
+    
+    Product.find(searchQuery)
         .then(products => {
             if(!products) throw createError(404, "Not Found");
             return res.status(200).json(products);
@@ -15,10 +17,14 @@ exports.create = (req, res, next) => {
         .then(newProduct => {
             const {category} = req;
             category.products.push(newProduct._id);
-            return Promise.all([newProduct, category.save()]);
+            newProduct.category = category._id;
+            return Promise.all([newProduct, category.save(), newProduct.save()]);
         })
         .then(response => res.status(201).json(response[0]))
-        .catch(error => next(error));
+        .catch(error => {
+            if(!error.status) error.status = 409;
+            next(error);
+        });
 };
 
 exports.findOne = (req, res, next) => {

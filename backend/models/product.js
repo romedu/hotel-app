@@ -8,10 +8,7 @@ const mongoose      = require("mongoose"),
             type: mongoose.Schema.Types.ObjectId,
             ref: "Category"
         },
-        image: {
-            type: String,
-            required: true
-        },
+        image: String,
         icon: String,
         description: {
             type: String,
