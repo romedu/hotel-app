@@ -5,11 +5,11 @@ const express    = require("express"),
       
 router.route("/")
     .get(helpers.find)
-    .post(middleware.checkIfToken, middleware.checkIfStaff, helpers.create);
+    .post(middleware.checkIfToken, middleware.checkIfAdmin, helpers.create);
     
 router.route("/:id")
     .get(helpers.findOne)
-    .patch(middleware.checkIfToken, middleware.checkIfStaff, helpers.update)
-    .delete(middleware.checkIfToken, middleware.checkIfStaff, helpers.delete);
+    .patch(middleware.checkIfToken, middleware.checkIfAdmin, helpers.update)
+    .delete(middleware.checkIfToken, middleware.checkIfAdmin, helpers.delete);
     
 module.exports = router;

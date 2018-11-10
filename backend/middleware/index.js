@@ -34,8 +34,8 @@ exports.checkIfToken = (req, res, next) => {
            });
 };
 
-exports.checkIfStaff = (req, res, next) => {
-    if(req.user.staff) return next();
+exports.checkIfAdmin = (req, res, next) => {
+    if(req.user.isAdmin) return next();
     const error = createError(401, "Not authorized to proceed");
     next(error);
 };

@@ -6,11 +6,11 @@ const express    = require("express"),
       
 router.route("/")
     .get(helpers.find)
-    .post(middleware.checkIfToken, middleware.checkIfStaff, checkIfCategory, helpers.create);
+    .post(middleware.checkIfToken, middleware.checkIfAdmin, checkIfCategory, helpers.create);
     
 router.route("/:productId")
     .get(helpers.findOne)
-    .patch(middleware.checkIfToken, middleware.checkIfStaff, helpers.update)
-    .delete(middleware.checkIfToken, middleware.checkIfStaff, checkIfCategory, helpers.delete);
+    .patch(middleware.checkIfToken, middleware.checkIfAdmin, helpers.update)
+    .delete(middleware.checkIfToken, middleware.checkIfAdmin, checkIfCategory, helpers.delete);
     
 module.exports = router;
