@@ -25,7 +25,10 @@ exports.checkIfToken = (req, res, next) => {
     }
     
     return jwt.verify(token, SECRET_KEY, (error, decoded) => {
-               if(error) return next(error);
+               if(error){
+                  error = createError(400, "Invalid/Expired Token");
+                  return next(error);
+               }
                req.user = decoded;
                next(); 
            });

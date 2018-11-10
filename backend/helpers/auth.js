@@ -2,6 +2,13 @@ const DB = require('../models'),
       jwt = require('jsonwebtoken'),
       {createError} = require("./error");
 
+const createToken = userData => {
+   const {SECRET_KEY} = process.env,
+         token = jwt.sign(userData, SECRET_KEY, {expiresIn: 60 * 60});
+   
+   return token;      
+};
+
 exports.login = async function(req, res, next){
    try {
       const {username, password} = req.body; 
@@ -10,7 +17,7 @@ exports.login = async function(req, res, next){
       const isMatch = await user.comparePassword(password);
     
       if(isMatch){
-         const token = jwt.sign({id, username, profileImage, isAdmin}, process.env.SECRET_KEY);
+         const token = createToken({id, username, profileImage, isAdmin});
          return res.status(200).json({id, username, profileImage, isAdmin, token});
       } 
       else {
@@ -26,9 +33,10 @@ exports.login = async function(req, res, next){
 
 exports.register = async function(req, res, next){
    try {
-      const user = await DB.User.create(req.body);
-      const {id, username, profileImage, isAdmin} = user;
-      const token = jwt.sign({id, username, profileImage, isAdmin}, process.env.SECRET_KEY);
+      const user = await DB.User.create(req.body),
+            {id, username, profileImage, isAdmin} = user,
+            token = createToken({id, username, profileImage, isAdmin});
+            
       return res.status(200).json({id, username, profileImage, isAdmin, token});
    }
    catch (error){
@@ -41,23 +49,9 @@ exports.register = async function(req, res, next){
    }
 };
 
-exports.verifyToken = (req, res, next) => {
-   const token = req.get("Authorization"),
-         {SECRET_KEY} = process.env;
-   
-   if(!token){
-      const error = createError(400, "Invalid/Expired Token");
-      return next(error);
-   }
-   
-   return jwt.verify(token, SECRET_KEY, (error, decoded) => {
-             if(error){
-                error = createError(400, "Invalid/Expired Token");
-                return next(error);
-             }
-             
-             return res.status(200).json(decoded); 
-          });
+exports.verifyToken = (req, res) => {
+   const {user} = req;
+   res.status(200).json(user);
 };
 
 module.exports = exports;

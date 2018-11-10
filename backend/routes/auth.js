@@ -5,6 +5,6 @@ const express = require("express"),
 
 router.post('/login', helpers.login);
 router.post('/register', middleware.checkAdminPassword, helpers.register);
-router.get("/token", helpers.verifyToken);
+router.get("/token", middleware.checkIfToken, helpers.verifyToken);
 
 module.exports = router;
