@@ -8,7 +8,7 @@ exports.checkAdminPassword = (req, res, next) => {
     if(body.isAdmin){
         if(body.adminPassword === ADMIN_KEY) return next();
         else {
-            const error = createError(401, "Incorrect Staff password");
+            const error = createError(401, "Incorrect Admin's password");
             return next(error);
         }
     }
