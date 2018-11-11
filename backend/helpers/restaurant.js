@@ -40,15 +40,33 @@ exports.update = (req, res, next) => {
 exports.delete = (req, res, next) => {
     Restaurant.findByIdAndRemove(req.params.id)
         .then(restaurant => {
-            const {user} = req;
-            Dish.deleteMany({servedIn: restaurant.id});
+            const {user} = req,
+                  addons = [Dish.deleteMany({servedIn: restaurant.id})];
+            
             if(user.reservation === req.params.id){
                 user.reservation = null;
-                return user.save();
+                addons.push(user.save());
             }
-            else return;
+            
+            return Promise.all(addons);
         })
         .then(data => res.status(200).json({message: "Restaurant removed Successfully"}))
+        .catch(error => next(error));
+};
+
+exports.addReservation = (req, res, next) => {
+    Restaurant.findById(req.params.id)
+        .then(restaurant => {
+            const {user} = req,
+                  {reservations, reservationLimit} = restaurant;
+                  
+            if(reservations.length >= reservationLimit) throw createError(409, "No more reservations available");
+            
+            restaurant.reservations.push(user.id);
+            user.reservation = restaurant.id;
+            return Promise.all([restaurant.save(), user.save()]);
+        })
+        .then(resolve => res.status(200).json({message: "Your reservation has been completed successfully"}))
         .catch(error => next(error));
 };
 

@@ -4,10 +4,7 @@ const mongoose         = require("mongoose"),
               type: String,
               required: true
           },
-          image: {
-              type: String,
-              required: true
-          },
+          image: String,
           icon: String,
           description: {
               type: String,
