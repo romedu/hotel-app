@@ -15,7 +15,10 @@ exports.create = (req, res, next) => {
             return Promise.all([newDish, restaurant.save(), newDish.save()]);
         })
         .then(resolve => res.status(201).json(resolve[0]))
-        .catch(error => next(error));
+        .catch(error => {
+            error.status = 400; 
+            return next(error);
+        });
 };
 
 exports.findOne = (req, res, next) => {
@@ -27,7 +30,10 @@ exports.findOne = (req, res, next) => {
 exports.update = (req, res, next) => {
     Dish.findByIdAndUpdate(req.params.dishId, req.body, {new: true})
         .then(editDish => res.status(204).json(editDish))
-        .catch(error => next(error));
+        .catch(error => {
+            error.status = 409; 
+            return next(error);
+        });
 };
 
 exports.delete = (req, res, next) => {

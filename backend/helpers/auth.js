@@ -37,7 +37,7 @@ exports.register = async function(req, res, next){
             {id, username, profileImage, isAdmin} = user,
             token = createToken({id, username, profileImage, isAdmin});
             
-      return res.status(200).json({id, username, profileImage, isAdmin, token});
+      return res.status(201).json({id, username, profileImage, isAdmin, token});
    }
    catch (error){
       if(error.code === 11000){

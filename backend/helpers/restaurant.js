@@ -1,21 +1,28 @@
-const {Restaurant, Dish} = require("../models");
+const {Restaurant, Dish} = require("../models"),
+      {createError} = require("./error");
 
 exports.find = (req, res, next) => {
     Restaurant.find({})
-        .then(restaurants => res.status(200).json(restaurants))
+        .then(restaurants => {
+            if(!restaurants) throw createError(404, "Not Found");
+            return res.status(200).json(restaurants);
+        })    
         .catch(error => next(error));
 };
 
 exports.create = (req, res, next) => {
     Restaurant.create(req.body)
         .then(newRestaurant => res.status(201).json(newRestaurant))
-        .catch(error => next(error));
+        .catch(error => {
+            error.status = 400;
+            next(error);
+        });
 };
 
 exports.findOne = (req, res, next) => {
     Restaurant.findById(req.params.id).populate("menu").exec()
         .then(restaurant => {
-            if(!restaurant) throw new Error("Not Found");
+            if(!restaurant) throw createError(404, "Not Found");
             res.status(200).json(restaurant);
         })
         .catch(error => next(error));
@@ -23,8 +30,11 @@ exports.findOne = (req, res, next) => {
 
 exports.update = (req, res, next) => {
     Restaurant.findByIdAndUpdate(req.params.id, req.body, {new: true})
-        .then(editedRestaurant => res.json(editedRestaurant))
-        .catch(error => next(error));
+        .then(editedRestaurant => res.status(200).json(editedRestaurant))
+        .catch(error => {
+            error.status = 409;
+            next(error);
+        });
 };
 
 exports.delete = (req, res, next) => {
@@ -38,7 +48,7 @@ exports.delete = (req, res, next) => {
             }
             else return;
         })
-        .then(data => res.json({message: "Restaurant removed Successfully"}))
+        .then(data => res.status(200).json({message: "Restaurant removed Successfully"}))
         .catch(error => next(error));
 };
 

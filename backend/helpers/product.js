@@ -2,7 +2,7 @@ const {Product} = require("../models"),
       {createError} = require("./error");
 
 exports.find = (req, res, next) => {
-    const searchQuery = req.query.all ? {} : {category: req.params.id};
+    const searchQuery = req.query.all === "true" ? {} : {category: req.params.id};
     
     Product.find(searchQuery)
         .then(products => {
@@ -22,7 +22,7 @@ exports.create = (req, res, next) => {
         })
         .then(response => res.status(201).json(response[0]))
         .catch(error => {
-            if(!error.status) error.status = 409;
+            error.status = 400;
             next(error);
         });
 };
@@ -39,7 +39,10 @@ exports.findOne = (req, res, next) => {
 exports.update = (req, res, next) => {
     Product.findByIdAndUpdate(req.params.productId, req.body, {new: true})
         .then(editedProduct => res.json(editedProduct))
-        .catch(error => next(error));
+        .catch(error => {
+            error.status = 409; 
+            return next(error);
+        });
 };
 
 exports.delete = (req, res, next) => {
@@ -49,7 +52,7 @@ exports.delete = (req, res, next) => {
             category.products.pull(req.params.id);
             return category.save();
         })
-        .then(response => res.json({message: "Product removed successfully"}))
+        .then(response => res.status(200).json({message: "Product removed successfully"}))
         .catch(error => next(error));
 };
 
