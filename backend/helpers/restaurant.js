@@ -1,4 +1,4 @@
-const {Restaurant, Dish} = require("../models"),
+const {Restaurant, Dish, User} = require("../models"),
       {createError} = require("./error");
 
 exports.find = (req, res, next) => {
@@ -40,13 +40,10 @@ exports.update = (req, res, next) => {
 exports.delete = (req, res, next) => {
     Restaurant.findByIdAndRemove(req.params.id)
         .then(restaurant => {
-            const {user} = req,
-                  addons = [Dish.deleteMany({servedIn: restaurant.id})];
+            const addons = [];
             
-            if(user.reservation === req.params.id){
-                user.reservation = null;
-                addons.push(user.save());
-            }
+            if(restaurant.menu.length) addons.push(Dish.deleteMany({servedIn: restaurant._id}));
+            if(restaurant.reservations.length) addons.push(User.updateMany({reservation: restaurant._id}, {reservation: undefined}));
             
             return Promise.all(addons);
         })
@@ -67,6 +64,23 @@ exports.addReservation = (req, res, next) => {
             return Promise.all([restaurant.save(), user.save()]);
         })
         .then(resolve => res.status(200).json({message: "Your reservation has been completed successfully"}))
+        .catch(error => next(error));
+};
+
+exports.removeReservation = (req, res, next) => {
+    Restaurant.findById(req.params.id)
+        .then(restaurant => {
+            if(!restaurant) throw createError(404, "Not Found");
+            const {reservations} = restaurant,
+                  {user} = req;
+            
+            if(reservations.indexOf(user._id) < 0) throw createError(409, "You have yet to make a reservation in this restaurant");
+            
+            restaurant.reservations.pull(user._id);
+            user.reservation = undefined;
+            return Promise.all([restaurant.save(), user.save()]);
+        })
+        .then(resolve => res.status(200).json({message: "Reservation successfully cancelled"}))
         .catch(error => next(error));
 };
 
