@@ -2,7 +2,7 @@ const {Dish} = require("../models"),
       {createError} = require("./error");
 
 exports.find = (req, res, next) => {
-    const searchQuery = req.params.all === "true" ? {} : {servedIn: req.params.id};
+    const searchQuery = req.query.all === "true" ? {} : {servedIn: req.params.id};
     
     Dish.find(searchQuery)
         .then(dishes =>{
