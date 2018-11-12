@@ -5,8 +5,8 @@ exports.createError = (status, message) => {
 };
 
 exports.errorHandler = (error, req, res, next) => {
-   const {status, message} = error;
-   if(!status) error.status = 500;
+   let {status, message} = error;
+   if(!status) status = 500;
    return res.status(status).json({status, message});
 };
 

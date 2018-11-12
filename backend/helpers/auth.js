@@ -11,14 +11,15 @@ const createToken = userData => {
 
 exports.login = async function(req, res, next){
    try {
-      const {username, password} = req.body; 
+      const {username} = req.body; 
       const user = await DB.User.findOne({username});
-      const {id, profileImage, isAdmin} = user;
-      const isMatch = await user.comparePassword(password);
+      const {password, ...userData} = user._doc;
+      const isMatch = await user.comparePassword(req.body.password);
     
       if(isMatch){
-         const token = createToken({id, username, profileImage, isAdmin});
-         return res.status(200).json({id, username, profileImage, isAdmin, token});
+         const token = createToken(userData);
+         userData.token = token;
+         return res.status(200).json(userData);
       } 
       else {
          const error = createError(400, "Invalid Username/Password");
@@ -34,10 +35,11 @@ exports.login = async function(req, res, next){
 exports.register = async function(req, res, next){
    try {
       const user = await DB.User.create(req.body),
-            {id, username, profileImage, isAdmin} = user,
-            token = createToken({id, username, profileImage, isAdmin});
+            {password, ...userData} = user._doc,
+            token = createToken(userData);
+            userData.token = token;
             
-      return res.status(201).json({id, username, profileImage, isAdmin, token});
+      return res.status(201).json(userData);
    }
    catch (error){
       if(error.code === 11000){

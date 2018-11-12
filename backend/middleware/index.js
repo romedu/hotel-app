@@ -37,7 +37,7 @@ exports.checkIfToken = (req, res, next) => {
 exports.checkIfAdmin = (req, res, next) => {
     if(req.user.isAdmin) return next();
     const error = createError(401, "Not authorized to proceed");
-    next(error);
+    return next(error);
 };
 
 exports.sanitizeBody = (req, res, next) => {
@@ -46,7 +46,7 @@ exports.sanitizeBody = (req, res, next) => {
     for(const field in req.body){
         req.body[field] = req.sanitize(req.body[field]);
     }
-    next();
+    return next();
 };
 
 module.exports = exports;
