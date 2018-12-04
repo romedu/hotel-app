@@ -1,13 +1,16 @@
-import * as actionTypes from "../actions/actionTypes";
+import {USER} from "../actions/actionTypes";
 
 const initialState = {
-    currentUser: null
+    currentUser: null,
+    userReservation: null
 };
 
 const reducer = (prevState = initialState, action) => {
     switch (action.type) {
-        case actionTypes.LOGIN: return {currentUser: action.user};
-        case actionTypes.LOGOUT: localStorage.removeItem("token"); return {currentUser: undefined};
+        case USER.LOGIN: return {...prevState, currentUser: action.user, userReservation: action.reservation};
+        case USER.LOGOUT: return initialState;
+        case USER.ADD_RESERVATION: return {...prevState, userReservation: action.reservation};
+        case USER.REMOVE_RESERVATION: return {...prevState, userReservation: null};
         default: break;
     }
     return prevState;

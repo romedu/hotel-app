@@ -1,30 +1,42 @@
-import axios from "axios";
-import * as actionTypes from "./actionTypes";
+import axios from "../../axiosInstance";
+import {USER} from "./actionTypes";
 
 export const loginUser = (authType, body) => {
     return dispatch => {
-        axios.post(`/api/auth/${authType}`, body)
-            .then(response => {
-                let {id, profileImage, username, token} = response.data;
+        axios.post(`/auth/${authType}`, body)
+            .then(response => response.data)
+            .then(user => {
+                const {token, reservation, ...userData} = user;
                 localStorage.setItem("token", token);
-                return dispatch(setUser({id, profileImage, username}));
+                return dispatch(setUser(userData, reservation));
             })
-            .catch(error => console.log(error.message));
+            .catch(error => {
+                //HANDLE ERROR
+            });
     };
+};
+
+export const logout = {
+    type: USER.LOGOUT
 };
 
 export const verifyToken = token => {
     return dispatch => {
-        axios.get(`/api/auth/token/${token}`)
-            .then(response => {
-                let {id, profileImage, username} = response.data;
-                return dispatch(setUser({id, profileImage, username}));
+        axios.get(`/auth/token`)
+            .then(response => response.data)
+            .then(user => {
+                const {token, reservation, ...userData} = user;
+                localStorage.setItem("token", token);
+                return dispatch(setUser(userData, reservation));
             })
-            .catch(error => console.log(error.message));
+            .catch(error => {
+                //HANDLE ERROR
+            });
     };
 };
 
-const setUser = user => ({
-    type: actionTypes.LOGIN,
-    user
+const setUser = (user, reservation) => ({
+    type: USER.LOGIN,
+    user,
+    reservation
 });

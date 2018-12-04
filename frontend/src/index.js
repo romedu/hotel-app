@@ -7,13 +7,17 @@ import {createStore, combineReducers, applyMiddleware, compose} from "redux";
 import {Provider} from "react-redux";
 import reduxThunk from "redux-thunk";
 import userReducer from "./store/reducers/userReducer";
-import linksReducer from "./store/reducers/linksReducer";
+import categoryReducer from "./store/reducers/categoryReducer";
+import productReducer from "./store/reducers/productReducer";
+import restaurantReducer from "./store/reducers/restaurantReducer";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const reducer = combineReducers({
     user: userReducer,
-    links: linksReducer
+    category: categoryReducer,
+    product: productReducer,
+    restaurant: restaurantReducer
 });
 
 const store = createStore(reducer, composeEnhancers(applyMiddleware(reduxThunk)));
