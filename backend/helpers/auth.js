@@ -12,7 +12,7 @@ const createToken = userData => {
 exports.login = async function(req, res, next){
    try {
       const {username} = req.body; 
-      const user = await DB.User.findOne({username});
+      const user = await DB.User.findOne({username}).populate("reservation").exec();
       const {password, ...userData} = user._doc;
       const isMatch = await user.comparePassword(req.body.password);
     

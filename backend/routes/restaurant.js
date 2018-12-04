@@ -13,7 +13,7 @@ router.route("/:id")
     .patch(middleware.checkIfToken, middleware.checkIfAdmin, helpers.update)
     .delete(middleware.checkIfToken, middleware.checkIfAdmin, helpers.delete);
 
-//MAY BE UPDATED IN THE FUTURE, SO IT CAN SUPPORT ADDING A SPECIFIC APPOINTMENT TIME  
+//MAY BE UPDATED IN THE FUTURE, SO IT CAN SUPPORT ADDING A SPECIFIC RESERVATION TIME  
 router.post("/:id/addReservation", middleware.checkIfToken, resturantMiddleware.checkIfReservation, helpers.addReservation);
 router.post("/:id/removeReservation", middleware.checkIfToken, resturantMiddleware.checkIfNotReservation, helpers.removeReservation);
   
