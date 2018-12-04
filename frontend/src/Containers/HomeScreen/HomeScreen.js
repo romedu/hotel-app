@@ -1,8 +1,8 @@
 import React from "react";
 import {Link} from "react-router-dom";
-import Main from "./Main/Main";
-import News from "./News/News";
-import Ad from "./Ad/Ad";
+import Main from "../../Components/HomeScreen/Main/Main";
+import News from "../../Components/HomeScreen/News/News";
+import AdBlock from "../../Components/HomeScreen/AdBlock/AdBlock";
 import "./HomeScreen.css";
 import gymIcon from "../../assets/images/gym.png";
 import zumbaIcon from "../../assets/images/zumba.png";
@@ -29,7 +29,7 @@ const HomeScreen = props => {
                 <Main currentUser={props.currentUser}/>
                 <div className="Info">
                     <Link to={`activities/${path}`} style={{textDecoration: "none", color: "black"}}>
-                        <Ad activity={randomActivity}/>
+                        <AdBlock activity={randomActivity}/>
                     </Link>
                     <News currentUser={props.currentUser}/>
                 </div>

@@ -1,6 +1,6 @@
 import React from "react";
 import {Route, Switch, Redirect} from "react-router-dom";
-import HomeScreen from "../../Components/HomeScreen/HomeScreen";
+import HomeScreen from "../HomeScreen/HomeScreen";
 import Profile from "../Profile/Profile";
 import Category from "../Category/Category";
 import Authentication from "../Authentication/Authentication";

@@ -14,7 +14,7 @@ class App extends Component {
   }
 
   componentDidMount(){
-    let token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
     if(token) return this.props.onTokenVerify(token);
   }
 
