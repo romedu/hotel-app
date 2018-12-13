@@ -13,7 +13,7 @@ const Toolbar = props => (
       <Link to="/" style={{height: "80%"}}>
          <Logo styles={{height: "100%"}} hotelLogo={logoImage}/>
       </Link>
-      <img src={settingsImage} alt="SE" className="Settings" onClick={props.logout}/>
+      <img src={settingsImage} alt="SE" className="Settings" />
       <nav className="DesktopOnly">
          <NavItems />
       </nav>
