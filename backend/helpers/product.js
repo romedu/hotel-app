@@ -2,9 +2,7 @@ const {Product} = require("../models"),
       {createError} = require("./error");
 
 exports.find = (req, res, next) => {
-    const searchQuery = req.query.all === "true" ? {} : {category: req.params.id};
-    
-    Product.find(searchQuery)
+    Product.find({})
         .then(products => {
             if(!products) throw createError(404, "Not Found");
             return res.status(200).json(products);

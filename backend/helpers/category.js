@@ -2,7 +2,7 @@ const {Category, Product} = require("../models"),
       {createError}       = require("../helpers/error");
 
 exports.find = (req, res, next) => {
-    Category.find({})
+    Category.find({}).populate("products").exec()
         .then(categories => {
             if(!categories) throw createError(404, "Not Found");
             return res.status(200).json(categories);
