@@ -12,7 +12,6 @@ const Profile = props => {
        <img src={profileImage} alt={username}/>
        <h2> {username} </h2>
        <Button width="65vw"><Link to="/services/my-reservations" style={{textDecoration: "none", color: "white"}}> Your Reservations </Link></Button>
-       <Button width="65vw"><Link to="/services/balance" style={{textDecoration: "none", color: "white"}}> Your Balance </Link></Button>
     </div>
     );
 };
