@@ -2,7 +2,7 @@ import {CATEGORY} from "../actions/actionTypes";
 import * as helpers from "../../helpers";
 
 const initialState = {
-    list: []
+    list: null
 };
 
 const reducer = (prevState = initialState, action) => {

@@ -1,8 +1,8 @@
-import {RESTAURANT} from "../action/actionTypes";
+import {RESTAURANT} from "../actions/actionTypes";
 import * as helpers from "../../helpers";
 
 const initialState = {
-    list: [],
+    list: null,
     current: null
 };
 

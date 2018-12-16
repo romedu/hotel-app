@@ -6,6 +6,7 @@ import Profile from "../Profile/Profile";
 import Category from "../Category/Category";
 import Authentication from "../Authentication/Authentication";
 import NoMatch from "../../Components/Error/NoMatch";
+import Restaurant from "../../Components/Restaurant/Restaurant";
 
 class Hotel extends Component {
    state = {
@@ -25,7 +26,7 @@ class Hotel extends Component {
                quote: "There's no quote to display",
                author: ""
             };
-            return this.setState({})
+            return this.setState({dailyQuote: noQuote})
          })
    }
 
@@ -34,7 +35,7 @@ class Hotel extends Component {
    }
 
    render(){
-      const {dailyQuote, isLoading} = this.state,
+      const {dailyQuote} = this.state,
             {currentUser, reservation} = this.props.user;
 
       return (
@@ -43,10 +44,10 @@ class Hotel extends Component {
                {currentUser ? <Redirect from="/login" to="/my-profile"/> : <Redirect from="/my-profile" to="/authentication"/>}
                {currentUser ? <Redirect from="/register" to="/my-profile"/> : <Redirect from="/register" to="/authentication"/>}
                {currentUser ? <Redirect from="/authentication" to="/my-profile"/> : <Redirect from="/login" to="/authentication"/>}
-               <Route exact path="/" render={() => <HomeScreen dailyQuote={dailyQuote} /> } />
+               <Route exact path="/" render={() => <HomeScreen dailyQuote={dailyQuote} />} />
                <Route path="/my-profile" render={() => <Profile currentUser={currentUser} userReservation={reservation} />} />
-               <Route path="/activities/:activityName/:productId" render={() => <Category kingdom="activity" name="Activities" />} />
-               <Route path="/restaurants" render={() => <Category kingdom="restaurant" name="Menu" />} />
+               <Route path="/activities/:categoryName" component={Category} />
+               <Route path="/restaurants" component={Restaurant} />
                <Route path="/authentication" component={Authentication} />
                <Route component={NoMatch} />
             </Switch>

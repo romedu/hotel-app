@@ -1,6 +1,7 @@
 import React from "react";
+import {Link} from "react-router-dom";
 
-const Instance = props => {
+const ProductThumbnail = props => {
     let styles = {
         backgroundImage: (props.background ? `linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.6)), url(${props.background})` : null),
         backgroundSize: "cover",
@@ -16,10 +17,12 @@ const Instance = props => {
     };
     
     return (
-        <div style={styles}>
+      <Link to={props.path}>
+         <div style={styles}>
             {props.children}
         </div>
+      </Link> 
     );
 };
 
-export default Instance;
+export default ProductThumbnail;

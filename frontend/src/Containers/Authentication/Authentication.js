@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {NavLink, Switch, Route, Redirect} from "react-router-dom";
 import AuthForm from "../../Components/AuthForm/AuthForm";
 import Logo from "../../Components/UI/Logo/Logo";
-import {loginUser} from "./store/actions/user";
+import {loginUser} from "../../store/actions/user";
 import "./Authentication.css";
 
 class Authentication extends Component {
