@@ -19,7 +19,7 @@ const Main = ({currentUser}) => {
     
    return (
        <div className={styles.Main}>
-           {info}
+           {content}
        </div>
    );
 };

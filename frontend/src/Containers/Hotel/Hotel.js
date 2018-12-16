@@ -34,19 +34,20 @@ class Hotel extends Component {
    }
 
    render(){
-      const {dailyQuote, isLoading} = this.state;
+      const {dailyQuote, isLoading} = this.state,
+            {currentUser, authenticate} = this.props;
 
       return (
          <div>
             <Switch>
-               {props.currentUser ? <Redirect from="/login" to="/my-profile"/> : <Redirect from="/my-profile" to="/authentication"/>}
-               {props.currentUser ? <Redirect from="/register" to="/my-profile"/> : <Redirect from="/register" to="/authentication"/>}
-               {props.currentUser ? <Redirect from="/authentication" to="/my-profile"/> : <Redirect from="/login" to="/authentication"/>}
+               {currentUser ? <Redirect from="/login" to="/my-profile"/> : <Redirect from="/my-profile" to="/authentication"/>}
+               {currentUser ? <Redirect from="/register" to="/my-profile"/> : <Redirect from="/register" to="/authentication"/>}
+               {currentUser ? <Redirect from="/authentication" to="/my-profile"/> : <Redirect from="/login" to="/authentication"/>}
                <Route exact path="/" render={() => <HomeScreen dailyQuote={dailyQuote} /> } />
-               <Route path="/my-profile" render={() => <Profile currentUser={props.currentUser} />} />
+               <Route path="/my-profile" render={() => <Profile currentUser={currentUser} />} />
                <Route path="/activities/:activityName/:productId" render={() => <Category kingdom="activity" name="Activities" />} />
                <Route path="/restaurants" render={() => <Category kingdom="restaurant" name="Menu" />} />
-               <Route path="/authentication" render={() => <Authentication authenticate={props.authenticate} />} />
+               <Route path="/authentication" render={() => <Authentication authenticate={authenticate} />} />
                <Route component={NoMatch} />
             </Switch>
          </div>

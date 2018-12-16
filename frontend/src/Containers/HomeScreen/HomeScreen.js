@@ -37,7 +37,8 @@ class HomeScreen extends Component {
    }
 
    render(){
-      const {currentUser, reservation: userReservation} = this.props.user;
+      const {categories, user} = this.props,
+            {currentUser, reservation: userReservation} = user;
 
       //this is used to get only the products from categories related to activities
       const activities = categories.filter(category => category.name.toLowerCase().includes("activit")).reduce((acc, nextCategory) => {
@@ -49,7 +50,7 @@ class HomeScreen extends Component {
       return (<div className="Home">
                   <Main currentUser={currentUser}/>
                   <div className="Info">
-                      <Link to={`activities/${path}`} style={{textDecoration: "none", color: "black"}}>
+                      <Link to={`activities/${randomActivity._id}`} style={{textDecoration: "none", color: "black"}}>
                           <AdBlock activity={randomActivity}/>
                       </Link>
                       <News currentUser={currentUser} reservation={userReservation} dailyQuote={this.props.dailyQuote} weather={this.state.weatherData} />

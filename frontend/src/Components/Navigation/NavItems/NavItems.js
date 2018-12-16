@@ -1,7 +1,7 @@
 import React from "react";
 import {connect} from "react-redux";
 import {NavLink} from "react-router-dom";
-import {UserFacade} from "../../UI/UserFacade/UserFacade";
+import UserFacade from "../../UI/UserFacade/UserFacade";
 import {capitalizeString, kebabCaseString} from "../../../helpers";
 import "./NavItems.css";
 
@@ -20,7 +20,7 @@ const NavItems = props => {
             Restaurants
          </h5>
          <ul className="subItems">
-            {restaurants.map(restaurant => (
+            {props.restaurants.map(restaurant => (
                <li>
                   <NavLink to={`/restaurant/${restaurant._id}`} key={restaurant._id} activeClassName={"active"} className="NavItem" onClick={props.hide}>
                      <img src={restaurant.icon} alt="•" />
