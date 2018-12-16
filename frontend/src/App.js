@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { BrowserRouter } from "react-router-dom";
+import {BrowserRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import Navigation from "./Containers/Navigation/Navigation";
 import Hotel from "./Containers/Hotel/Hotel";
-import * as actions from "./store/actions/user";
+import {verifyToken} from "./store/actions/user";
 import './App.css';
 
 class App extends Component {
@@ -17,7 +17,7 @@ class App extends Component {
       <BrowserRouter>
         <div className="App">
           <Navigation />
-          <Hotel currentUser={this.props.currentUser} authenticate={this.props.onLoginHandler} />
+          <Hotel currentUser={this.props.currentUser} />
           <div className="Computer"> 
             <h1> Work under contruction </h1>
             <h2> Please use a mobile device in portrait mode </h2>
@@ -33,8 +33,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onLoginHandler: (authType, body) => dispatch(actions.loginUser(authType, body)),
-  onTokenVerify: token => dispatch(actions.verifyToken(token))
+  onTokenVerify: token => dispatch(verifyToken(token))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -35,7 +35,7 @@ class Hotel extends Component {
 
    render(){
       const {dailyQuote, isLoading} = this.state,
-            {currentUser, authenticate} = this.props;
+            {currentUser} = this.props;
 
       return (
          <div>
@@ -47,7 +47,7 @@ class Hotel extends Component {
                <Route path="/my-profile" render={() => <Profile currentUser={currentUser} />} />
                <Route path="/activities/:activityName/:productId" render={() => <Category kingdom="activity" name="Activities" />} />
                <Route path="/restaurants" render={() => <Category kingdom="restaurant" name="Menu" />} />
-               <Route path="/authentication" render={() => <Authentication authenticate={authenticate} />} />
+               <Route path="/authentication" component={Authentication} />
                <Route component={NoMatch} />
             </Switch>
          </div>

@@ -2,18 +2,12 @@ import React from "react";
 import {withRouter, Redirect} from "react-router-dom";
 import TextInput from "../UI/Inputs/TextInput/TextInput";
 import Button from "../UI/Button/Button";
+import styles from "./AuthForm.module.css";
 
 const AuthForm = props => {
     let type = props.match.params.type,
         fieldGroup = props[type],
-        inputs = [],
-        formStyle = {
-            width: "100vw",
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "column",
-            marginTop: "6vh"
-        };
+        inputs = [];
     
     if(type !== "login" && type !== "register"){
         return <Redirect to={`/${type}`} />;
@@ -26,14 +20,12 @@ const AuthForm = props => {
     }
     
     return (   
-        <div style={{display: "flex", justifyContent: "center"}}> 
-            <form onSubmit={(e) => props.submitHandler(e, type)} style={formStyle}>
+        <div style={styles.AuthForm}> 
+            <form onSubmit={(e) => props.submitHandler(e, type)}>
                 {inputs}
-                <Button bgColor="#2196c4" width="80vw" border="8px"> {type} </Button>
-                <div style={{color: "#e8b358", fontStyle: "italic", textDecoration: "none", paddingTop: "1vh"}} 
-                onClick={() => props.authenticate("login", {username: "guest", password: "none"})}>
-                    Log in as Guest 
-                </div>
+                <Button bgColor="#2196c4" width="80vw" border="8px">
+                  {type}
+               </Button>
             </form>
         </div>
     );
