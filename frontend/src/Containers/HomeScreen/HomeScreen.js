@@ -1,39 +1,66 @@
-import React from "react";
+import React, {Component} from "react";
 import {Link} from "react-router-dom";
+import {connect} from "react-redux";
+import axios from "axios";
 import Main from "../../Components/HomeScreen/Main/Main";
 import News from "../../Components/HomeScreen/News/News";
 import AdBlock from "../../Components/HomeScreen/AdBlock/AdBlock";
 import "./HomeScreen.css";
-import gymIcon from "../../assets/images/gym.png";
-import zumbaIcon from "../../assets/images/zumba.png";
-import scubaIcon from "../../assets/images/scuba-diving.png";
-import theaterIcon from "../../assets/images/theater.png";
-import cinemaIcon from "../../assets/images/cinema.png";
-import toursIcon from "../../assets/images/tours.png";
-import spaIcon from "../../assets/images/spa.png";
 
-const HomeScreen = props => {
-    let  adActivities = [
-        {name: "Gym", icon: gymIcon}, 
-        {name:"Zumba", icon: zumbaIcon},
-        {name:"Scuba-Diving", icon: scubaIcon}, 
-        {name:"Theater", icon: theaterIcon},
-        {name:"Cinema", icon: cinemaIcon},
-        {name:"Tours", icon: toursIcon}, 
-        {name:"Spa", icon: spaIcon}
-    ];
-    let randomActivity = adActivities[Math.floor(Math.random() * adActivities.length)];
-    let path = randomActivity.name.toLowerCase().split(" ").join("-");
-    
-    return (<div className="Home">
-                <Main currentUser={props.currentUser}/>
-                <div className="Info">
-                    <Link to={`activities/${path}`} style={{textDecoration: "none", color: "black"}}>
-                        <AdBlock activity={randomActivity}/>
-                    </Link>
-                    <News currentUser={props.currentUser}/>
-                </div>
-            </div>);
-};
+class HomeScreen extends Component {
+   state = {
+      isLoading: true,
+      weatherData: null
+   }
 
-export default HomeScreen;
+   componentDidMount(){
+      //this is used to get the weather of the user's current location
+      navigator.geolocation.getCurrentPosition(position => {
+         const {latitude, longitude} = position.coords;
+         if(latitude && longitude){
+            axios.get(`http://api.weatherunlocked.com/api/current/${latitude.toFixed(2)},${longitude.toFixed(2)}?app_id=dea94c5d&app_key=4a1c9fb5388f624ceaeb42a9862778e8`)
+               .then(response => response.data)
+               .then(weatherData => {
+                  const {wx_desc: description, wx_icon: image, temp_c, temp_f} = weatherData;
+                  return this.setState({weatherData: {description, image, temp_c, temp_f}});
+               })
+               .catch(error => {
+                  return this.setState({weatherData: false});
+               })
+         }
+         else return this.setState({weatherData: false});
+      })
+   }
+
+   componentDidUpdate(prevProps, prevState){
+      if(prevState.weatherData !== this.state.weatherData) this.setState({isLoading: false});
+   }
+
+   render(){
+      const {currentUser, reservation: userReservation} = this.props.user;
+
+      //this is used to get only the products from categories related to activities
+      const activities = categories.filter(category => category.name.toLowerCase().includes("activit")).reduce((acc, nextCategory) => {
+        return acc.concat(nextCategory.products);
+      }, []);
+  
+      const randomActivity = activities[Math.floor(Math.random() * activities.length)];
+      
+      return (<div className="Home">
+                  <Main currentUser={currentUser}/>
+                  <div className="Info">
+                      <Link to={`activities/${path}`} style={{textDecoration: "none", color: "black"}}>
+                          <AdBlock activity={randomActivity}/>
+                      </Link>
+                      <News currentUser={currentUser} reservation={userReservation} dailyQuote={this.props.dailyQuote} weather={this.state.weatherData} />
+                  </div>
+              </div>);
+   }
+}
+
+const mapStateToProps = state => ({
+   user: state.user,
+   categories: state.category.list
+})
+
+export default connect(mapStateToProps)(HomeScreen);

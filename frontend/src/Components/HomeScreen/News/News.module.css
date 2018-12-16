@@ -1,0 +1,11 @@
+.News {
+   width: 92vw;
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: space-between;
+}
+
+.News a {
+   text-decoration: none; 
+   color: "black";
+}

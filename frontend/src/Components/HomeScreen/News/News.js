@@ -1,47 +1,91 @@
-import React from "react";
+import React, {Fragment} from "react";
 import {Link} from "react-router-dom";
 import New from "./New/New";
+import styles from "./News.module.css";
 
 const News = props => {
-    let styles = {
-        width: "92vw",
-        display: "flex",
-        flexWrap: "wrap",
-        justifyContent: "space-between"
-    };
-    
-    let specialActivity = ["Foam Pool Party", "Karaoke", "Hoola Hoop Contest", "Spanish Classes", "Waterpolo", "Fireworks Show", "Paella By the Beach"],
-        tonightBuffet = ["American Night", "Dominican Night", "Oriental Night", "International Night"],
-        tonightShow = ["Magic Show", "Belly Dance", "Cirque Du Soleil", "Romeo & Juliet", "Comedy Show", "Merengue Night"];
-    
-    let reserveOptions = [
-        {activity: "Menya Hataka", time: "Time: 8pm"},
-        {activity: "Dolce Italia", time: "Time: 9pm"},
-        {activity: "Corrido de Mexico", time: "Time: 8pm"},
-        {activity: "Cantabrico", time: "Time: 9pm"},
-        {activity: "Isla del Marisco", time: "Time: 8pm"},
-        {activity: "Zumba", time: "Time: 9am"},
-        {activity: "Scuba Diving", time: "Time: 11am"},
-        {activity: "Spa", time: "Time: 3pm"}
-    ];
+   let reservationNew;
+   const {currentUser, reservation, dailyQuote, weather} = props,
+         currentDate = new Date(),
+         weatherData = !weather ? <div> Weather is not available </div>
+                               : (
+                                  <Fragment>
+                                     <div>
+                                       {weather.description}
+                                    </div>
+                                    <img src={weather.image} alt="" />
+                                    <div>
+                                       {weather.temp_f}
+                                       <br />
+                                       {weather.temp_c}
+                                    </div>
+                                  </Fragment>
+                               );
 
-    let myReseration = getRandomVal(reserveOptions);
-     
-    let reservations = (props.currentUser ? {path: "services/my-reservations", info: "Today Reservations", body: <span> {myReseration.activity} <div> {myReseration.time} </div></span>} 
-                        : {path: "authentication/login", info: "Login to see your reservations", body:"→"});
-                        
-    function getRandomVal(options){
-        return options[Math.floor(Math.random() * options.length)];
-    }
+   if(!currentUser){
+      reservationNew = (
+         <Link to="/authentication/login">
+            <New label="Login to see your reservations">
+               →
+            </New>
+         </Link>
+      )
+   }
+   else if(!reservation){
+      reservationNew = (
+         <Link to="/restaurants">
+            <New label="Tonight's Reservation">
+               Click here to make a reservation
+               <br />
+               →
+            </New>
+         </Link>
+      )
+   }
+   else {
+      reservationNew = (
+         <Link to={`/restaurants/${reservation._id}/menu`}>
+            <New label="Tonight's Reservation">
+               <div>
+                  {reservation.name}
+               </div>
+               <div>
+                  Check the menu
+                  <br />
+                  →
+               </div>
+            </New>
+         </Link>
+      )
+   }
 
-    return (
-        <div style={styles}>
-            <Link to={reservations.path} style={{textDecoration: "none", color: "black"}}><New label={reservations.info}> {reservations.body} </New></Link>
-            <New label="Today Special Activity"> {getRandomVal(specialActivity)} <div> Time: 10am </div> </New>
-            <New label="Tonight's Buffet"> {getRandomVal(tonightBuffet)} </New>
-            <New label="Tonight's Show"> {getRandomVal(tonightShow)} </New>
-        </div>
-    );
+   return (
+      <div style={styles}>
+         <New label="Today's Weather"> 
+            {weatherData}
+         </New>
+         <New label="Today's Date"> 
+            <div>
+               {currentDate.getDay()}
+            </div>
+            <h5>
+               {currentDate.getDate()}
+            </h5>
+            <div>
+               {`${currentDate.getMonth()}, ${currentDate.getFullYear()}`}
+            </div>
+         </New>
+         <New label="Daily Quote">
+            <div>
+               {dailyQuote.quote}
+            </div> 
+            <h6>
+               {dailyQuote.author}
+            </h6>
+         </New>
+         {reservationNew}
+      </div>
+   );
 };
 
 export default News;
