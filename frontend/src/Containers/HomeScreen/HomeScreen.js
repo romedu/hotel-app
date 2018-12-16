@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import {Link} from "react-router-dom";
 import {connect} from "react-redux";
 import axios from "axios";
 import Main from "../../Components/HomeScreen/Main/Main";
@@ -50,10 +49,8 @@ class HomeScreen extends Component {
       return (<div className="Home">
                   <Main currentUser={currentUser}/>
                   <div className="Info">
-                      <Link to={`activities/${randomActivity._id}`} style={{textDecoration: "none", color: "black"}}>
-                          <AdBlock activity={randomActivity}/>
-                      </Link>
-                      <News currentUser={currentUser} reservation={userReservation} dailyQuote={this.props.dailyQuote} weather={this.state.weatherData} />
+                     <AdBlock activity={randomActivity}/>
+                     <News currentUser={currentUser} reservation={userReservation} dailyQuote={this.props.dailyQuote} weather={this.state.weatherData} />
                   </div>
               </div>);
    }
