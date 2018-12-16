@@ -17,7 +17,7 @@ class App extends Component {
       <BrowserRouter>
         <div className="App">
           <Navigation />
-          <Hotel currentUser={this.props.currentUser} />
+          <Hotel currentUser={this.props.user} />
           <div className="Computer"> 
             <h1> Work under contruction </h1>
             <h2> Please use a mobile device in portrait mode </h2>
@@ -29,7 +29,7 @@ class App extends Component {
 }
 
 const mapStateToProps = state => ({
-  currentUser: state.user.currentUser
+  user: state.user
 });
 
 const mapDispatchToProps = dispatch => ({

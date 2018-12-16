@@ -35,7 +35,7 @@ class Hotel extends Component {
 
    render(){
       const {dailyQuote, isLoading} = this.state,
-            {currentUser} = this.props;
+            {currentUser, reservation} = this.props.user;
 
       return (
          <div>
@@ -44,7 +44,7 @@ class Hotel extends Component {
                {currentUser ? <Redirect from="/register" to="/my-profile"/> : <Redirect from="/register" to="/authentication"/>}
                {currentUser ? <Redirect from="/authentication" to="/my-profile"/> : <Redirect from="/login" to="/authentication"/>}
                <Route exact path="/" render={() => <HomeScreen dailyQuote={dailyQuote} /> } />
-               <Route path="/my-profile" render={() => <Profile currentUser={currentUser} />} />
+               <Route path="/my-profile" render={() => <Profile currentUser={currentUser} userReservation={reservation} />} />
                <Route path="/activities/:activityName/:productId" render={() => <Category kingdom="activity" name="Activities" />} />
                <Route path="/restaurants" render={() => <Category kingdom="restaurant" name="Menu" />} />
                <Route path="/authentication" component={Authentication} />
