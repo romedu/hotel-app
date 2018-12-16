@@ -9,5 +9,6 @@ exports.Product    = require("./product");
 exports.Restaurant = require("./restaurant");
 exports.Dish       = require("./dish");
 exports.Category   = require("./category");
+exports.DailyQuote = require("./dailyQuote");
 
 module.exports = exports;

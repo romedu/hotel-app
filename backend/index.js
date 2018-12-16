@@ -10,6 +10,7 @@ const express            = require("express"),
       productRoutes      = require("./routes/product"),
       restaurantRoutes   = require("./routes/restaurant"),
       dishRoutes         = require("./routes/dish"),
+      dailyQuoteRoutes  = require("./routes/dailyQuote"),
       {errorHandler}     = require("./helpers/error"),
       {sanitizeBody}     = require("./middleware");
 
@@ -23,6 +24,7 @@ app.use("/api/category", sanitizeBody, categoryRoutes);
 app.use("/api/category/:id/product", sanitizeBody, productRoutes);
 app.use("/api/restaurant", sanitizeBody, restaurantRoutes);
 app.use("/api/restaurant/:id/dish", sanitizeBody, dishRoutes);
+app.use("/api/dailyQuote", dailyQuoteRoutes);
 
 app.use(function(req, res, next){
    const err = new Error("Not Found");
