@@ -20,7 +20,7 @@ const AuthForm = props => {
     }
     
     return (   
-        <div style={styles.AuthForm}> 
+        <div className={styles.AuthForm}> 
             <form onSubmit={(e) => props.submitHandler(e, type)}>
                 {inputs}
                 <Button bgColor="#2196c4" width="80vw" border="8px">

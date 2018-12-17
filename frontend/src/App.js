@@ -23,8 +23,10 @@ class App extends Component {
    }
 
    componentDidUpdate(){
-      const {restaurants, categories} = this.props;
-      if(restaurants && categories) this.setState({isLoading: false});
+      const {restaurants, categories} = this.props,
+            {isLoading} = this.state;
+
+      if(restaurants && categories && isLoading) this.setState({isLoading: false});
    }
   
    render() {
@@ -32,7 +34,7 @@ class App extends Component {
             content = !isLoading ? (
                                     <Fragment>
                                        <Navigation />
-                                       <Hotel currentUser={this.props.user} />
+                                       <Hotel user={this.props.user} />
                                        <div className="Computer"> 
                                        <h1> Work under contruction </h1>
                                        <h2> Please use a mobile device in portrait mode </h2>
@@ -58,8 +60,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   onTokenVerify: token => dispatch(verifyToken(token)),
-  onCategoriesGet: () => dispatch(getCategories),
-  onRestaurantsGet: () => dispatch(getRestaurants),
+  onCategoriesGet: () => dispatch(getCategories()),
+  onRestaurantsGet: () => dispatch(getRestaurants()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

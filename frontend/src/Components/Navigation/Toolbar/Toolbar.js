@@ -10,7 +10,7 @@ const Toolbar = props => (
    <header className="Toolbar">
       <Hamburger toggleMenu={props.toggleMenu}/>
       <Link to="/" style={{height: "80%"}}>
-         <Logo styles="Toolbar" />
+         <Logo />
       </Link>
       <img src={settingsImage} alt="SE" className="Settings" />
       <nav className="DesktopOnly">

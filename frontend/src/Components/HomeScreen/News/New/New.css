@@ -1,10 +1,15 @@
 .New {
-      width: 45vw;
-      height: 20vh;
-      background-color: #f2f4f7;
-      margin-top: 1vh;
-      text-align: center;
-    }
+   width: 45vw;
+   height: 22vh;
+   background-color: #f2f4f7;
+   margin-top: 1vh;
+   text-align: center;
+}
+
+.New h3 {
+   margin-left: 0;
+   margin-right: 0;
+}
 
 @media (max-height: 639px) {
     .New {

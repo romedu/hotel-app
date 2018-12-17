@@ -49,7 +49,7 @@ class HomeScreen extends Component {
       return (<div className="Home">
                   <Main currentUser={currentUser}/>
                   <div className="Info">
-                     <AdBlock activity={randomActivity}/>
+                     {randomActivity && <AdBlock activity={randomActivity}/>}
                      <News currentUser={currentUser} reservation={userReservation} dailyQuote={this.props.dailyQuote} weather={this.state.weatherData} />
                   </div>
               </div>);

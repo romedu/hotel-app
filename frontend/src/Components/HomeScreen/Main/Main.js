@@ -14,7 +14,7 @@ const Main = ({currentUser}) => {
                                        →
                                  </Link>
                                : <Link to="/my-profile">
-                                    You have {currentUser.daysAsGuest} day(s) as a guest in the hotel
+                                    You have {currentUser && currentUser.daysAsGuest} day(s) as a guest in the hotel
                                  </Link>; 
     
    return (

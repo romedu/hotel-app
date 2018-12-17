@@ -5,7 +5,9 @@ import styles from "./News.module.css";
 
 const News = props => {
    let reservationNew;
-   const {currentUser, reservation, dailyQuote, weather} = props,
+   const weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+         months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+         {currentUser, reservation, dailyQuote, weather} = props,
          currentDate = new Date(),
          weatherData = !weather ? <div> Weather is not available </div>
                                : (
@@ -15,9 +17,9 @@ const News = props => {
                                     </div>
                                     <img src={weather.image} alt="" />
                                     <div>
-                                       {weather.temp_f}
+                                       {weather.temp_f}° F
                                        <br />
-                                       {weather.temp_c}
+                                       {weather.temp_c}° C
                                     </div>
                                   </Fragment>
                                );
@@ -60,28 +62,28 @@ const News = props => {
    }
 
    return (
-      <div style={styles}>
+      <div className={styles.News}>
          <New label="Today's Weather"> 
             {weatherData}
          </New>
          <New label="Today's Date"> 
             <div>
-               {currentDate.getDay()}
+               {weekDays[currentDate.getDay()]}
             </div>
-            <h5>
-               {currentDate.getDate()}
-            </h5>
             <div>
-               {`${currentDate.getMonth()}, ${currentDate.getFullYear()}`}
+               {currentDate.getDate()}
+            </div>
+            <div>
+               {`${months[currentDate.getMonth()]}, ${currentDate.getFullYear()}`}
             </div>
          </New>
          <New label="Daily Quote">
             <div>
                {dailyQuote.quote}
             </div> 
-            <h6>
+            <div>
                {dailyQuote.author}
-            </h6>
+            </div>
          </New>
          {reservationNew}
       </div>

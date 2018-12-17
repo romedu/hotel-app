@@ -15,7 +15,7 @@ class Hotel extends Component {
    }
 
    componentDidMount(){
-      axios.get("/api/dailyQuote")
+      axios.get("/dailyQuote")
          .then(response => response.data)
          .then(dailyQuote => {
             if(dailyQuote.status && dailyQuote.status !== 200) throw new Error();
@@ -35,22 +35,26 @@ class Hotel extends Component {
    }
 
    render(){
-      const {dailyQuote} = this.state,
-            {currentUser, reservation} = this.props.user;
+      const {dailyQuote, isLoading} = this.state,
+            {currentUser, reservation} = this.props.user,
+            content = isLoading ? null
+                     : (
+                        <Switch>
+                           {currentUser ? <Redirect from="/login" to="/my-profile"/> : <Redirect from="/my-profile" to="/authentication"/>}
+                           {currentUser ? <Redirect from="/register" to="/my-profile"/> : <Redirect from="/register" to="/authentication"/>}
+                           {currentUser ? <Redirect from="/authentication" to="/my-profile"/> : <Redirect from="/login" to="/authentication"/>}
+                           <Route exact path="/" render={() => <HomeScreen dailyQuote={dailyQuote} />} />
+                           <Route path="/my-profile" render={() => <Profile currentUser={currentUser} userReservation={reservation} />} />
+                           <Route path="/activities/:categoryName" component={Category} />
+                           <Route path="/restaurants" component={Restaurant} />
+                           <Route path="/authentication" component={Authentication} />
+                           <Route component={NoMatch} />
+                        </Switch>
+                     );
 
       return (
          <div>
-            <Switch>
-               {currentUser ? <Redirect from="/login" to="/my-profile"/> : <Redirect from="/my-profile" to="/authentication"/>}
-               {currentUser ? <Redirect from="/register" to="/my-profile"/> : <Redirect from="/register" to="/authentication"/>}
-               {currentUser ? <Redirect from="/authentication" to="/my-profile"/> : <Redirect from="/login" to="/authentication"/>}
-               <Route exact path="/" render={() => <HomeScreen dailyQuote={dailyQuote} />} />
-               <Route path="/my-profile" render={() => <Profile currentUser={currentUser} userReservation={reservation} />} />
-               <Route path="/activities/:categoryName" component={Category} />
-               <Route path="/restaurants" component={Restaurant} />
-               <Route path="/authentication" component={Authentication} />
-               <Route component={NoMatch} />
-            </Switch>
+            {content}
          </div>
       );
    }
