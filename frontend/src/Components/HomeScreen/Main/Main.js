@@ -3,7 +3,13 @@ import {Link} from "react-router-dom";
 import styles from "./Main.module.css";
 
 const Main = ({currentUser}) => {
-   const content = currentUser ? <Link to="/">
+   const content = currentUser ? (
+                                  <Link to="/my-profile">
+                                    You have {currentUser.daysAsGuest} day(s) as a guest in the hotel
+                                  </Link>
+                                 ) 
+                               : (
+                                  <Link to="/authentication/login">
                                     <h2> 
                                        Login
                                     </h2>
@@ -12,10 +18,8 @@ const Main = ({currentUser}) => {
                                        Register 
                                     </h2>
                                        →
-                                 </Link>
-                               : <Link to="/my-profile">
-                                    You have {currentUser && currentUser.daysAsGuest} day(s) as a guest in the hotel
-                                 </Link>; 
+                                  </Link>
+                                 );
     
    return (
        <div className={styles.Main}>

@@ -1,12 +1,18 @@
 import React, {Component, Fragment} from "react";
-import {connect} from "react-redux";
+import {withRouter} from "react-router-dom";
 import Toolbar from "../../Components/Navigation/Toolbar/Toolbar";
 import SideDrawer from "../../Components/Navigation/SideDrawer/SideDrawer";
-import {USER} from "../../store/actions/actionTypes";
 
 class Navigation extends Component {
    state = {
       showSideDrawer: false
+    }
+
+    componentDidUpdate(prevProps){
+       const {showSideDrawer} = this.state,
+             {location} = this.props;
+
+      if((prevProps.location.pathname !== location.pathname) && showSideDrawer) this.hideSideDrawerHandler();
     }
 
    toggleSideDrawerHandler = () => this.setState(prevState => ({showSideDrawer: !prevState.showSideDrawer}));
@@ -22,8 +28,4 @@ class Navigation extends Component {
    }
 }
 
-const mapDispatchToProps = dispatch => ({
-   onLogoutHandler: () => dispatch({type: USER.LOGOUT}),
-});
-
-export default connect(null, mapDispatchToProps)(Navigation);
+export default withRouter(Navigation);

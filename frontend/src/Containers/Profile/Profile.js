@@ -13,14 +13,14 @@ const Profile = props => {
                                  </h4>
                                  <img src={userReservation.image} alt="" />
                                  <Button width="65vw">
-                                    <Link to={`/restaurant/${userReservation._id}/menu`} style={{textDecoration: "none", color: "white"}}>
+                                    <Link to={`/restaurants/${userReservation._id}/menu`} style={{textDecoration: "none", color: "white"}}>
                                        Click here to check the menu
                                     </Link>
                                  </Button>
                               </Fragment>
                            ) : (
                               <Button width="65vw">
-                                 <Link to={"/restaurant"} style={{textDecoration: "none", color: "white"}}>
+                                 <Link to={"/restaurants"} style={{textDecoration: "none", color: "white"}}>
                                     Click here to make a reservation
                                  </Link>
                               </Button>

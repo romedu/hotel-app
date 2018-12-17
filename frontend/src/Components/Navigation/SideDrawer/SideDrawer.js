@@ -8,7 +8,7 @@ const SideDrawer = props => (
       <Backdrop show={props.showing} hide={props.hide}/>
       <div className={`SideDrawer ${props.showing ? "Open" : "Close"}`}>
          <nav>
-            <NavItems hide={props.hide} showing={props.showing} />
+            <NavItems showing={props.showing} />
          </nav>
       </div>   
    </Fragment>
